@@ -39,7 +39,9 @@ struct CIMetalCompilerTool: ParsableCommand {
                 "-fcikernel",
                 input,
                 "-o",
-                airOutput
+                airOutput,
+                "-fmodules-cache-path=",
+                cache,
             ]
             
             try p.run()
