@@ -5,40 +5,39 @@ import PackagePlugin
 @main
 struct CIMetalPlugin: BuildToolPlugin {
     func createBuildCommands(context: PackagePlugin.PluginContext, target: PackagePlugin.Target) async throws -> [PackagePlugin.Command] {
-        var paths: [Path] = []
+        var paths: [URL] = []
         target.directory.walk { path in
             if path.pathExtension == "metal" {
                 paths.append(path)
             }
         }
         
-        let cache = context.pluginWorkDirectory.appending(subpath: "cache")
-        let output = context.pluginWorkDirectory.appending(["default.metallib"])
-        
+        let cache = context.pluginWorkDirectoryURL.appending(path: "cache")
+        let output = context.pluginWorkDirectoryURL.appending(path: "default.metallib")
+                
         Diagnostics.remark("Running...for \(paths)")
         
         return [
             .buildCommand(
                 displayName: "CIMetalCompilerTool",
-                executable: try context.tool(named: "CIMetalCompilerTool").path,
+                executable: try context.tool(named: "CIMetalCompilerTool").url,
                 arguments: [
-                    "--output", output.string,
-                    "--cache", cache,
+                    "--output", output.path(),
+                    "--cache", cache.path(),
                 ]
-                + paths.map(\.string),
-
+                + paths.map(\.path),
                 environment: [:],
                 inputFiles: paths,
                 outputFiles: [
                     output
                 ]
-            ),
+            )
         ]
     }
 }
 
 extension Path {
-    func walk(_ visitor: (Path) -> Void) {
+    func walk(_ visitor: (URL) -> Void) {
         let errorHandler = { (_: URL, _: Swift.Error) -> Bool in
             true
         }
@@ -49,15 +48,14 @@ extension Path {
             guard let url = url as? URL else {
                 fatalError()
             }
-            let path = Path(url.path)
-            visitor(path)
+            visitor(url)
         }
     }
-
+    
     var url: URL {
         URL(fileURLWithPath: string)
     }
-
+    
     var pathExtension: String {
         url.pathExtension
     }
