@@ -35,8 +35,8 @@ struct CIMetalCompilerTool: ParsableCommand {
             let airOutput = "\(cache)/\(name).air"
             
             p.arguments = [
-//                "--sdk",
-//                sdk,
+                "--sdk",
+                sdk,
                 "metal",
                 "-c",
                 "-fcikernel",
@@ -72,8 +72,8 @@ struct CIMetalCompilerTool: ParsableCommand {
             let p = Process()
             p.executableURL = xcRunURL
             p.arguments = [
-//                "--sdk",
-//                sdk,
+                "--sdk",
+                sdk,
                 "metallib",
                 "--cikernel",
                 airFile,
@@ -106,8 +106,8 @@ struct CIMetalCompilerTool: ParsableCommand {
         let p = Process()
         p.executableURL = xcRunURL
         p.arguments = [
-//            "--sdk",
-//            sdk,
+            "--sdk",
+            sdk,
             "metal",
             "-fcikernel",
             "-o",
