@@ -44,6 +44,13 @@ struct CIMetalCompilerTool: ParsableCommand {
             
             try p.run()
             p.waitUntilExit()
+            let status = p.terminationStatus
+
+            if status != 0 {
+                throw CompileError(message: "Failed to compile \(input) with exit code \(status)")
+            } else {
+                print("compiled \(input) to \(airOutput)")
+            }
             
             airOutputs.append(airOutput)
         }
@@ -72,6 +79,14 @@ struct CIMetalCompilerTool: ParsableCommand {
             try p.run()
             p.waitUntilExit()
             
+            let status = p.terminationStatus
+            
+            if status != 0 {
+                throw CompileError(message: "Failed to link \(airFile) with exit code \(status)")
+            } else {
+                print("compiled \(airFile) to \(metalLibOutput)")
+            }
+            
             metalLibs.append(metalLibOutput)
         }
         
@@ -94,7 +109,19 @@ struct CIMetalCompilerTool: ParsableCommand {
         
         try p.run()
         p.waitUntilExit()
+        
+        let status = p.terminationStatus
+        
+        if status != 0 {
+            throw CompileError(message: "Failed to merge to \(output) with exit code \(status)")
+        } else {
+            print("====CIMetalCompilerTool completed!")
+        }
     }
+}
+
+struct CompileError: Error {
+    let message: String
 }
 
 extension String {
