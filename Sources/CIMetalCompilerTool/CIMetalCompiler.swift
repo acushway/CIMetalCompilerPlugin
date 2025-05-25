@@ -14,8 +14,6 @@ struct CIMetalCompilerTool: ParsableCommand {
     var inputs: [String]
     
     mutating func run() throws {
-        let first = inputs.first!
-        
         print("=== run MetalCompilerTool===")
         
         let xcRunURL = URL(fileURLWithPath: "/usr/bin/xcrun")
