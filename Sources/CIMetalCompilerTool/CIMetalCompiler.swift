@@ -17,6 +17,7 @@ struct CIMetalCompilerTool: ParsableCommand {
         print("=== run MetalCompilerTool===")
         
         let xcRunURL = URL(fileURLWithPath: "/usr/bin/xcrun")
+        let sdk = "iphoneos"
         
         try FileManager.default.createDirectory(atPath: cache, withIntermediateDirectories: true)
         
@@ -34,14 +35,14 @@ struct CIMetalCompilerTool: ParsableCommand {
             let airOutput = "\(cache)/\(name).air"
             
             p.arguments = [
+                "-sdk",
+                sdk,
                 "metal",
                 "-c",
                 "-fcikernel",
                 input,
                 "-o",
-                airOutput,
-                "-fmodules-cache-path=",
-                cache,
+                airOutput
             ]
             
             try p.run()
@@ -71,6 +72,8 @@ struct CIMetalCompilerTool: ParsableCommand {
             let p = Process()
             p.executableURL = xcRunURL
             p.arguments = [
+                "-sdk",
+                sdk,
                 "metallib",
                 "--cikernel",
                 airFile,
@@ -103,6 +106,8 @@ struct CIMetalCompilerTool: ParsableCommand {
         let p = Process()
         p.executableURL = xcRunURL
         p.arguments = [
+            "-sdk",
+            sdk,
             "metal",
             "-fcikernel",
             "-o",
