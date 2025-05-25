@@ -45,7 +45,7 @@ struct CIMetalCompilerTool: ParsableCommand {
             ]
             
             try p.run()
-            try p.waitUntilExit()
+            p.waitUntilExit()
             
             airOutputs.append(airOutput)
         }
@@ -72,7 +72,7 @@ struct CIMetalCompilerTool: ParsableCommand {
             ]
             
             try p.run()
-            try p.waitUntilExit()
+            p.waitUntilExit()
             
             metalLibs.append(metalLibOutput)
         }
@@ -95,7 +95,7 @@ struct CIMetalCompilerTool: ParsableCommand {
         ] + airOutputs
         
         try p.run()
-        try p.waitUntilExit()
+        p.waitUntilExit()
     }
 }
 
