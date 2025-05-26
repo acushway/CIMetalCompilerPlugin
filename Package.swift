@@ -17,5 +17,11 @@ let package = Package(
         .executableTarget(name: "CIMetalCompilerTool", dependencies: [
             .product(name: "ArgumentParser", package: "swift-argument-parser"),
         ]),
+        .testTarget(
+            name: "CIMetalCompilerPluginTests",
+            dependencies: [],
+            exclude: ["Shaders/"],
+            plugins: ["CIMetalCompilerPlugin"]
+        )
     ]
 )
