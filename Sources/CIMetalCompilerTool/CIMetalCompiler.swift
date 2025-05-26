@@ -101,7 +101,7 @@ struct CIMetalCompilerTool: ParsableCommand {
         
         // Finally, merge all metallib files into one output file.
         // Equivelent to this command line:
-        // xcrun metal -fcikernel -o MyKernel.metallib MyKernel1.metallib MyKernel2.metallib ...
+        // xcrun metal -fcikernel -o default.metallib MyKernel1.metallib MyKernel2.metallib ...
         // NOTE: This command is different from the one that was first introduced in WWDC20:
         // https://developer.apple.com/videos/play/wwdc2020/10021
         // The old command is obsolete and no longer works.
