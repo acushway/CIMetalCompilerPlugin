@@ -1,4 +1,4 @@
-# MetalCompilerPlugin
+# CIMetalCompilerPlugin
 
 Swift Package plugin to compile and link Core Image Metal Shaders to a single Metal Library that can be use in code. 
 
