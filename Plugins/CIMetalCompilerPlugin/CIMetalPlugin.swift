@@ -6,7 +6,8 @@ import PackagePlugin
 struct CIMetalPlugin: BuildToolPlugin {
     func createBuildCommands(context: PackagePlugin.PluginContext, target: PackagePlugin.Target) async throws -> [PackagePlugin.Command] {
         var paths: [URL] = []
-        target.directory.walk { path in
+        
+        URL(string: target.directory.string)?.walk { path in
             if path.pathExtension == "metal" {
                 paths.append(path)
             }
@@ -14,7 +15,7 @@ struct CIMetalPlugin: BuildToolPlugin {
         
         let cache = context.pluginWorkDirectoryURL.appending(path: "cache")
         let output = context.pluginWorkDirectoryURL.appending(path: "default.metallib")
-                
+        
         Diagnostics.remark("Running...for \(paths)")
         
         return [
@@ -36,27 +37,22 @@ struct CIMetalPlugin: BuildToolPlugin {
     }
 }
 
-extension Path {
+extension URL {
     func walk(_ visitor: (URL) -> Void) {
-        let errorHandler = { (_: URL, _: Swift.Error) -> Bool in
-            true
-        }
-        guard let enumerator = FileManager().enumerator(at: url, includingPropertiesForKeys: nil, options: [], errorHandler: errorHandler) else {
+        guard let enumerator = FileManager().enumerator(
+            at: self,
+            includingPropertiesForKeys: nil,
+            options: [],
+            errorHandler: { _,_ in true }
+        ) else {
             fatalError()
         }
+        
         for url in enumerator {
             guard let url = url as? URL else {
                 fatalError()
             }
             visitor(url)
         }
-    }
-    
-    var url: URL {
-        URL(fileURLWithPath: string)
-    }
-    
-    var pathExtension: String {
-        url.pathExtension
     }
 }

@@ -2,7 +2,13 @@ import ArgumentParser
 import Foundation
 import os
 
+#if !targetEnvironment(macCatalyst)
+/// Useful links:
+/// https://clang.llvm.org/docs/Modules.html#problems-with-the-current-model
+/// https://keith.github.io/xcode-man-pages/xcrun.1.html
+/// https://developer.apple.com/documentation/metal/building-a-shader-library-by-precompiling-source-files
 @main
+@available(macOS 13.0, *)
 struct CIMetalCompilerTool: ParsableCommand {
     @Option(name: .long)
     var output: String
@@ -14,7 +20,7 @@ struct CIMetalCompilerTool: ParsableCommand {
     var inputs: [String]
     
     mutating func run() throws {
-        print("=== run MetalCompilerTool===")
+        print("=== run MetalCompilerTool ===")
         
         let xcRunURL = URL(fileURLWithPath: "/usr/bin/xcrun")
         
@@ -120,15 +126,20 @@ struct CIMetalCompilerTool: ParsableCommand {
         }
     }
 }
-
-struct CompileError: Error {
-    let message: String
-}
-
-extension String {
-    var nameWithoutExtension: String {
-        let url = URL(string: self)!
-        let name = url.deletingPathExtension().lastPathComponent
-        return name
+#else
+@main
+struct CIMetalCompilerTool: ParsableCommand {
+    @Option(name: .long)
+    var output: String
+    
+    @Option(name: .long)
+    var cache: String
+    
+    @Argument
+    var inputs: [String]
+    
+    mutating func run() throws {
+        throw CompileError(message: "CIMetalCompilerTool is not supported on macOS Catalyst. But this code won't run anyway.")
     }
 }
+#endif
