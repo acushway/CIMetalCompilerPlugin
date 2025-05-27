@@ -50,6 +50,12 @@ Note:
 1. You should put all your Core Image Metal Shaders in a folder like `Shaders`, as shown above, including any C headers that are included in the shaders.
 2. You also need to explicitly exclude the entire `Shaders` folder, as the Swift Package build system will still try to build the shaders and will fail.
 
+After the Swift Packgage being built, the `default.metallib` will reside in the Package's Bundle. Get this file using `Bundle.module` in your Swift Package's code:
+
+```swift
+let url = Bundle.module.url(forResource: "default.metallib", withExtension: "metallib")
+```
+
 # How does it work under the hood
 
 It internally iterates over the directory to find all files that end with "metal".
