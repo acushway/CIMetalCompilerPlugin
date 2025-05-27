@@ -66,6 +66,8 @@ Then it uses the equivalent command to create the intermediate files:
 xcrun metal -c -fcikernel MyKernel.metal -o MyKernel.air "-fmodules=none" 
 ```
 
+> Clang enables Modules for Metal by default. Enabling Modules will cause the build to fail when running on Xcode Cloud, as it may not have permissions to write the files to the system default cache dir. Thus, disabling Modules by specifying `-fmodules=none` or specifying the dir in the plugin sandbox dir `-fmodules-cache-path=xxxx` will do the trick.
+
 For each intermediate file:
 
 ```shell
