@@ -23,7 +23,6 @@ Add this package as a dependency to your Swift Package:
 ```swift
 dependencies: [
     .package(url: "https://github.com/JuniperPhoton/CIMetalCompilerPlugin", from: "0.11.0")
-    // .package(path: "../CIMetalCompilerPlugin")
 ],
 ```
 
@@ -53,7 +52,7 @@ Note:
 After the Swift Packgage being built, the `default.metallib` will reside in the Package's Bundle. Get this file using `Bundle.module` in your Swift Package's code:
 
 ```swift
-let url = Bundle.module.url(forResource: "default.metallib", withExtension: "metallib")
+let url = Bundle.module.url(forResource: "default", withExtension: "metallib")
 ```
 
 # How does it work under the hood
