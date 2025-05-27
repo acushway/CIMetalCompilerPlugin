@@ -26,8 +26,6 @@ dependencies: [
 ],
 ```
 
-> Uncomment the second line to debug this package locally if you want.
-
 Specify the plugin to use for your target.
 
 ```swift
