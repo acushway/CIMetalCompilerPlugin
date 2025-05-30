@@ -23,7 +23,7 @@ Add this package as a dependency to your Swift Package:
 ```swift
 dependencies: [
     .package(url: "https://github.com/JuniperPhoton/CIMetalCompilerPlugin", from: "0.11.0")
-],
+]
 ```
 
 Specify the plugin to use for your target.
@@ -32,12 +32,8 @@ Specify the plugin to use for your target.
 targets: [
     .target(
         name: "MyPackage",
-        exclude: [
-            "Shaders/"
-        ],
-        plugins: [
-            .plugin(name: "CIMetalCompilerPlugin", package: "CIMetalCompilerPlugin")
-        ]
+        exclude: ["Shaders/"],
+        plugins: ["CIMetalCompilerPlugin"]
     )
 ]
 ```
