@@ -33,7 +33,7 @@ targets: [
     .target(
         name: "MyPackage",
         exclude: ["Shaders/"],
-        plugins: ["CIMetalCompilerPlugin"]
+        plugins: [.plugin(name: "CIMetalCompilerPlugin", package: "CIMetalCompilerPlugin")]
     )
 ]
 ```
