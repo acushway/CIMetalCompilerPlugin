@@ -1,8 +1,10 @@
 # CIMetalCompilerPlugin
 
-Swift Package plugin to compile and link Core Image Metal Shaders to a single Metal Library that can be use in code. 
+A Swift Package plugin to compile and link Core Image Metal Shaders to a single Metal Library that can be use in code. 
 
 This repo significantly changed some implementations of this [original repo](https://github.com/schwa/MetalCompilerPlugin).
+
+More details and insights about creating a Swift Package plugin can be [read here](https://juniperphoton.substack.com/p/creating-core-image-metal-shader).
 
 # Background
 
