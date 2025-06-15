@@ -75,7 +75,7 @@ For each intermediate file:
 xcrun metallib --cikernel MyKernel.air -o MyKernel.metallib
 ```
 
-Those `metallib` can be use directly in code:
+Those `metallib` can be already used directly in code:
 
 ```swift
 let resource = "your_metallib_name"
@@ -91,7 +91,7 @@ guard let data = try? Data(contentsOf: url) else {
 let kernel = try? CIKernel(functionName: functionName, fromMetalLibraryData: data)
 ```
 
-But they can be merged into one `default.metallib`:
+They can be then merged into one `default.metallib`:
 
 ```shell
 xcrun metal -fcikernel -o default.metallib MyKernel1.metallib MyKernel2.metallib ...
