@@ -15,14 +15,14 @@ struct CIMetalPlugin: BuildToolPlugin {
         
         let cache = context.pluginWorkDirectoryURL.appending(path: "cache")
         let output = context.pluginWorkDirectoryURL.appending(path: "default.metallib")
-                
+        
         guard !paths.isEmpty else {
             Diagnostics.remark("No .metal files found in target directory, skipping CIMetalCompilerTool execution.")
             return []
         }
         
         Diagnostics.remark("Running...for \(paths)")
-
+        
         return [
             .buildCommand(
                 displayName: "CIMetalCompilerTool",
