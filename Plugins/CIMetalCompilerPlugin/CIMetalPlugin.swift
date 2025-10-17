@@ -6,8 +6,10 @@ import PackagePlugin
 struct CIMetalPlugin: BuildToolPlugin {
     func createBuildCommands(context: PackagePlugin.PluginContext, target: PackagePlugin.Target) async throws -> [PackagePlugin.Command] {
         var paths: [URL] = []
-        
-        URL(string: target.directory.string)?.walk { path in
+
+        // Only search in the coreImageShaders directory to avoid conflicts with SPM's auto-Metal compilation
+        let shadersDir = URL(string: target.directory.string)?.appending(path: "coreImageShaders")
+        shadersDir?.walk { path in
             if path.pathExtension == "metal" {
                 paths.append(path)
             }
