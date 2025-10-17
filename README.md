@@ -26,7 +26,7 @@ Add this package as a dependency to your Swift Package:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/JuniperPhoton/CIMetalCompilerPlugin", from: "0.11.0")
+    .package(url: "https://github.com/JuniperPhoton/CIMetalCompilerPlugin", from: "0.1.0")
 ]
 ```
 
@@ -51,10 +51,10 @@ Note:
 1. You should put all your Core Image Metal Shaders in a folder like `Shaders`, as shown above, including any C headers that are included in the shaders.
 2. You also need to explicitly exclude the entire `Shaders` folder, as the Swift Package build system will still try to build the shaders and will fail.
 
-After the Swift Packgage being built, the `default.metallib` will reside in the Package's Bundle. Get this file using `Bundle.module` in your Swift Package's code:
+After the Swift Packgage being built, the `coreimage.metallib` will reside in the Package's Bundle. Get this file using `Bundle.module` in your Swift Package's code:
 
 ```swift
-let url = Bundle.module.url(forResource: "default", withExtension: "metallib")
+let url = Bundle.module.url(forResource: "coreimage", withExtension: "metallib")
 ```
 
 # How does it work under the hood
@@ -91,10 +91,10 @@ guard let data = try? Data(contentsOf: url) else {
 let kernel = try? CIKernel(functionName: functionName, fromMetalLibraryData: data)
 ```
 
-They can be then merged into one `default.metallib`:
+They can be then merged into one `coreimage.metallib`:
 
 ```shell
-xcrun metal -fcikernel -o default.metallib MyKernel1.metallib MyKernel2.metallib ...
+xcrun metal -fcikernel -o coreimage.metallib MyKernel1.metallib MyKernel2.metallib ...
 ```
 
 # Useful Links
