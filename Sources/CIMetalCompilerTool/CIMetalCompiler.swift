@@ -27,28 +27,28 @@ struct CIMetalCompilerTool: ParsableCommand {
         try FileManager.default.createDirectory(atPath: cache, withIntermediateDirectories: true)
         
         var airOutputs = [String]()
-        
+
         // First compile each input to .air files.
-        // Equivelent to this command line:
-        // xcrun metal -c -fcikernel MyKernel.metal -o MyKernel.air
+        // For stitchable shaders, use -std=ios-metal2.4 instead of -fcikernel
+        // Equivalent to: xcrun metal -std=ios-metal2.4 -c MyKernel.metal -o MyKernel.air
         for input in inputs {
             let name = input.nameWithoutExtension
-            
+
             let p = Process()
             p.executableURL = xcRunURL
-            
+
             let airOutput = "\(cache)/\(name).air"
-            
+
             p.arguments = [
                 "metal",
+                "-std=ios-metal2.4",
                 "-c",
-                "-fcikernel",
                 input,
                 "-o",
                 airOutput,
                 "-fmodules=none" // Must disable fmodules to avoid issues when building in Xcode Cloud.
             ]
-            
+
             try p.run()
             p.waitUntilExit()
             let status = p.terminationStatus
@@ -58,69 +58,33 @@ struct CIMetalCompilerTool: ParsableCommand {
             } else {
                 print("compiled \(input) to \(airOutput)")
             }
-            
+
             airOutputs.append(airOutput)
         }
         
-        var metalLibs = [String]()
-        
-        // Then, using metallib to link each .air file and output to a .metallib file.
-        // Equivelent to this command line:
-        // xcrun metallib --cikernel MyKernel.air -o MyKernel.metallib
-        for airFile in airOutputs {
-            let name = airFile.nameWithoutExtension
-            
-            print("linking \(airFile) to metallib")
-            
-            let metalLibOutput = "\(cache)/\(name).metallib"
-            let p = Process()
-            p.executableURL = xcRunURL
-            p.arguments = [
-                "metallib",
-                "--cikernel",
-                airFile,
-                "-o",
-                metalLibOutput
-            ]
-            
-            try p.run()
-            p.waitUntilExit()
-            
-            let status = p.terminationStatus
-            
-            if status != 0 {
-                throw CompileError(message: "Failed to link \(airFile) with exit code \(status)")
-            } else {
-                print("compiled \(airFile) to \(metalLibOutput)")
-            }
-            
-            metalLibs.append(metalLibOutput)
-        }
-        
-        print("merging \(metalLibs) to \(output)")
-        
-        // Finally, merge all metallib files into one output file.
-        // Equivelent to this command line:
-        // xcrun metal -fcikernel -o default.metallib MyKernel1.metallib MyKernel2.metallib ...
-        // NOTE: This command is different from the one that was first introduced in WWDC20:
-        // https://developer.apple.com/videos/play/wwdc2020/10021
-        // The old command is obsolete and no longer works.
+        // Link all .air files into a single metallib with CoreImage framework support.
+        // For stitchable shaders, we need to link with the CoreImage framework.
+        // Equivalent to: xcrun metal *.air -o default.metallib -framework CoreImage
+        print("linking \(airOutputs.count) air file(s) to \(output) with CoreImage framework")
+
         let p = Process()
         p.executableURL = xcRunURL
         p.arguments = [
-            "metal",
-            "-fcikernel",
+            "metal"
+        ] + airOutputs + [
             "-o",
             output,
-        ] + airOutputs
-        
+            "-framework",
+            "CoreImage"
+        ]
+
         try p.run()
         p.waitUntilExit()
-        
+
         let status = p.terminationStatus
-        
+
         if status != 0 {
-            throw CompileError(message: "Failed to merge to \(output) with exit code \(status)")
+            throw CompileError(message: "Failed to link air files to \(output) with exit code \(status)")
         } else {
             print("====CIMetalCompilerTool completed!")
         }
