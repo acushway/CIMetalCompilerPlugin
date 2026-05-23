@@ -2,7 +2,7 @@ import ArgumentParser
 import Foundation
 import os
 
-#if !targetEnvironment(macCatalyst)
+#if os(macOS)
 /// Useful links:
 /// https://clang.llvm.org/docs/Modules.html#problems-with-the-current-model
 /// https://keith.github.io/xcode-man-pages/xcrun.1.html
@@ -103,7 +103,7 @@ struct CIMetalCompilerTool: ParsableCommand {
     var inputs: [String]
     
     mutating func run() throws {
-        throw CompileError(message: "CIMetalCompilerTool is not supported on macOS Catalyst. But this code won't run anyway.")
+        throw CompileError(message: "CIMetalCompilerTool is only supported on macOS. This fallback should not run in normal build-tool plugin usage.")
     }
 }
 #endif
